@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "src/app/api/v1/evals/run/route.ts": { "maxDuration": 300 },
+    "src/app/api/github/webhook/route.ts": { "maxDuration": 300 }
+  },
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [{ "key": "x-robots-tag", "value": "noindex" }]
+    }
+  ]
+}
