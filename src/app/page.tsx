@@ -388,7 +388,7 @@ function SocialProof() {
         <div className="grid md:grid-cols-2 gap-6">
           {quotes.map((q) => (
             <div key={q.who} className="card card-hover p-7 flex flex-col gap-5">
-              <div className="text-3xl text-[color:var(--color-brand)] opacity-40 leading-none font-serif">"</div>
+              <div className="text-3xl text-[color:var(--color-brand)] opacity-40 leading-none font-serif">&ldquo;</div>
               <div className="text-base leading-relaxed text-[color:var(--color-text)]">{q.body}</div>
               <div className="flex items-center gap-3 mt-auto">
                 <div className="size-8 rounded-full bg-gradient-to-br from-violet-400 to-violet-700 flex items-center justify-center text-[11px] font-bold text-white">
