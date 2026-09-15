@@ -38,13 +38,24 @@ function toStr(v: unknown): string {
   return JSON.stringify(v);
 }
 
+function getOpenAIClient(): OpenAI {
+  const apiKey = process.env.OPENAI_API_KEY || "";
+  const baseURL =
+    process.env.OPENAI_BASE_URL ||
+    (apiKey.startsWith("sk-or-") ? "https://openrouter.ai/api/v1" : undefined);
+  return new OpenAI({
+    apiKey,
+    baseURL,
+  });
+}
+
 async function judgeWithLlm(
   rubric: string,
   input: unknown,
   expected: unknown,
   output: unknown,
 ): Promise<{ passed: boolean; score: number; reason: string }> {
-  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  const openai = getOpenAIClient();
 
   const system = `You are an LLM-as-judge evaluator. Apply the rubric strictly. Respond with JSON only: {"score": 0|1, "reason": "..."}.`;
   const user = `Rubric:
@@ -164,7 +175,7 @@ export async function runEval(opts: RunOptions): Promise<string> {
       .from(datasetItems)
       .where(eq(datasetItems.datasetId, opts.datasetId));
 
-    const openai = opts.outputs ? null : new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    const openai = opts.outputs ? null : getOpenAIClient();
 
     // Bounded concurrent execution (max 4 parallel calls) with per-item fault tolerance
     const CONCURRENCY_LIMIT = 4;
