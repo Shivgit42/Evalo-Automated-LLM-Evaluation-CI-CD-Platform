@@ -11,10 +11,10 @@ export default async function SettingsPage({
   searchParams,
 }: {
   params: Promise<{ projectId: string }>;
-  searchParams: Promise<{ newKey?: string; billing?: string; session_id?: string; gh?: string }>;
+  searchParams: Promise<{ newKey?: string; billing?: string; gh?: string }>;
 }) {
   const { projectId } = await params;
-  const { newKey, billing, session_id, gh } = await searchParams;
+  const { newKey, billing, gh } = await searchParams;
 
   const keys = await db
     .select()
@@ -27,7 +27,7 @@ export default async function SettingsPage({
     .from(githubInstallations)
     .where(eq(githubInstallations.projectId, projectId));
 
-  let project = await db.query.projects.findFirst({
+  const project = await db.query.projects.findFirst({
     where: eq(projects.id, projectId),
   });
 

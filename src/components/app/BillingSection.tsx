@@ -26,8 +26,8 @@ export function BillingSection({ projectId, plan, traceCount }: BillingSectionPr
         throw new Error(data.error || "Failed to create checkout session");
       }
       window.location.href = data.url;
-    } catch (err: any) {
-      setError(err.message || "An error occurred");
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "An error occurred");
       setLoading(false);
     }
   }
