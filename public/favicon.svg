@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <rect width="64" height="64" rx="12" fill="#0d0d10"/>
+  <defs>
+    <linearGradient id="g" x1="10" y1="16" x2="54" y2="48" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+  </defs>
+  <!-- Top bar (full width) -->
+  <rect x="13" y="16" width="38" height="7" rx="2" fill="url(#g)"/>
+  <!-- Middle bar (slightly shorter) -->
+  <rect x="13" y="28.5" width="28" height="7" rx="2" fill="url(#g)"/>
+  <!-- Bottom bar (shortest) -->
+  <rect x="13" y="41" width="38" height="7" rx="2" fill="url(#g)"/>
+</svg>

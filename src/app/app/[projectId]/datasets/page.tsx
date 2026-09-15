@@ -1,9 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { db } from "@/lib/db";
 import { datasets } from "@/lib/db/schema";
 import { eq, desc } from "drizzle-orm";
 import { createDatasetAction } from "@/lib/projects";
 import { formatRelative } from "@/lib/utils";
+
+export const metadata: Metadata = { title: "Datasets" };
 
 export default async function DatasetsPage({
   params,
