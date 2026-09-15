@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { db } from "@/lib/db";
 import { apiKeys, projects, githubInstallations } from "@/lib/db/schema";
 import { eq, desc, and, isNull } from "drizzle-orm";
@@ -5,6 +6,8 @@ import { createApiKeyAction, revokeApiKeyAction } from "@/lib/projects";
 import { formatRelative } from "@/lib/utils";
 import { BillingSection } from "@/components/app/BillingSection";
 import { stripe, PRICE_TO_PLAN } from "@/lib/stripe";
+
+export const metadata: Metadata = { title: "Settings" };
 
 export default async function SettingsPage({
   params,

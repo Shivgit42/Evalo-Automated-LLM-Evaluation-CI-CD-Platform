@@ -1,8 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { db } from "@/lib/db";
 import { traces } from "@/lib/db/schema";
 import { eq, desc } from "drizzle-orm";
 import { formatRelative } from "@/lib/utils";
+
+export const metadata: Metadata = { title: "Traces" };
+
 
 export default async function TracesPage({
   params,

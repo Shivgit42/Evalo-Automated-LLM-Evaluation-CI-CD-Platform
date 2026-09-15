@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { db } from "@/lib/db";
 import { datasets, evalDefinitions, evalRuns } from "@/lib/db/schema";
@@ -7,6 +8,8 @@ import {
   triggerEvalRunAction,
 } from "@/lib/evals/actions";
 import { formatRelative } from "@/lib/utils";
+
+export const metadata: Metadata = { title: "Eval Runs" };
 
 export default async function EvalsPage({
   params,
