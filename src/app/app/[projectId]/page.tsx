@@ -3,16 +3,21 @@ import { traces, evalRuns, datasets } from "@/lib/db/schema";
 import { eq, desc, sql } from "drizzle-orm";
 import { formatRelative } from "@/lib/utils";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default async function OverviewPage({
   params,
   searchParams,
 }: {
   params: Promise<{ projectId: string }>;
-  searchParams: Promise<{ newKey?: string }>;
+  searchParams: Promise<{ newKey?: string; billing?: string }>;
 }) {
   const { projectId } = await params;
-  const { newKey } = await searchParams;
+  const { newKey, billing } = await searchParams;
+
+  if (billing === "success") {
+    redirect(`/app/${projectId}/settings?billing=success`);
+  }
 
   const [tracesCountRow] = await db
     .select({ c: sql<number>`count(*)::int` })
