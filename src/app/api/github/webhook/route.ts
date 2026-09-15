@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse, after } from "next/server";
 import { db } from "@/lib/db";
-import { evalRuns, githubInstallations } from "@/lib/db/schema";
+import { evalRuns, githubInstallations, datasets, evalDefinitions } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
 import { verifyWebhookSignature, postCheckRun, commentOnPr } from "@/lib/github";
 import { runEval } from "@/lib/evals/runner";
@@ -42,12 +42,28 @@ export async function POST(req: NextRequest) {
   const install = await db.query.githubInstallations.findFirst({
     where: eq(githubInstallations.installationId, installationId),
   });
-  if (
-    !install ||
-    install.repoFullName !== repoFullName ||
-    !install.datasetId ||
-    !install.evalDefinitionId
-  ) {
+  if (!install || install.repoFullName !== repoFullName) {
+    return NextResponse.json({ ok: true, skipped: "repo_mismatch" });
+  }
+
+  let datasetId = install.datasetId;
+  let evalDefinitionId = install.evalDefinitionId;
+
+  if (!datasetId) {
+    const firstDs = await db.query.datasets.findFirst({
+      where: eq(datasets.projectId, install.projectId),
+    });
+    datasetId = firstDs?.id ?? null;
+  }
+
+  if (!evalDefinitionId) {
+    const firstDef = await db.query.evalDefinitions.findFirst({
+      where: eq(evalDefinitions.projectId, install.projectId),
+    });
+    evalDefinitionId = firstDef?.id ?? null;
+  }
+
+  if (!datasetId || !evalDefinitionId) {
     return NextResponse.json({ ok: true, skipped: "no_config" });
   }
 
@@ -55,8 +71,6 @@ export async function POST(req: NextRequest) {
   const prNumber = payload.pull_request.number;
   const targetBranch = payload.pull_request.base.ref;
   const projectId = install.projectId;
-  const datasetId = install.datasetId;
-  const evalDefinitionId = install.evalDefinitionId;
   const baseUrl = process.env.AUTH_URL ?? "http://localhost:3000";
 
   // Execute in background using Next.js after() to prevent Vercel container termination
